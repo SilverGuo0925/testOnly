@@ -1,0 +1,77 @@
+.green-text.btn:hover {
+    color: #005d62;
+}
+
+:host ::ng-deep .accordion>.card {
+    // overflow: visible;
+}
+
+.sqm {
+    border-left: 0px;
+    border-top: 1px solid #0c8188;
+    border-bottom: 1px solid #0c8188;
+    border-right: 1px solid #0c8188;
+
+    color: #0c8188;
+}
+
+.green-border {
+    border-left: 1px solid #0c8188;
+    border-top: 1px solid #0c8188;
+    border-bottom: 1px solid #0c8188;
+    border-right: 0px;
+    color: #0c8188;
+}
+
+@media (max-width: 1200px) {
+    .btn-sm {
+        padding: 0.25rem 0.25rem;
+    }
+
+}
+
+.dropdown-menu.show {
+    display: block;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+    overflow-x: 2;
+}
+
+
+.dropdown-item.active,
+.dropdown-item:active {
+    outline: none;
+    background: linear-gradient(180deg, #EFEFEF 0%, #EFEFEF 100%);
+}
+
+::placeholder {
+    color: #0c8188;
+}
+
+.is-invalid-sqm-content {
+
+    border-left: 1px solid red;
+    border-top: 1px solid red;
+    border-bottom: 1px solid red;
+    border-right: 0px;
+    color: red;
+}
+
+.is-invalid-sqm {
+
+    border-right: 1px solid red;
+    border-top: 1px solid red;
+    border-bottom: 1px solid red;
+    border-left: 0px;
+    color: red;
+
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}

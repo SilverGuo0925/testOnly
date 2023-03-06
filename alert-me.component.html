@@ -1,0 +1,417 @@
+<section class="profile-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 side-left">
+                <app-side-panel></app-side-panel>
+            </div>
+
+            <div class="col">
+                <div class="row">
+                    <h1 class="col-12"><strong>Alert Me</strong></h1>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <ngb-accordion #acc="ngbAccordion" activeIds="contact-details-panel">
+                                    <ngb-panel id="contact-details-panel">
+                                        <ng-template ngbPanelHeader let-opened="opened">
+                                            <div class="d-flex align-items-center justify-content-between accordion-header">
+                                                <button ngbPanelToggle class="btn btn-sm p-0 text-left" aria-label="toggle">
+                                                    <h5 class="font-weight-bold">Step 1: Update Contact Details</h5>
+                                                </button>
+                                                <button ngbPanelToggle class="btn btn-sm p-0" aria-label="toggle"><em class="p-0 fa fa-top float-right mt-1 circle-icon"
+                                                        [ngClass]="opened ? 'fa-chevron-up' : 'fa-chevron-down'"></em></button>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template ngbPanelContent>
+
+                                            <form [formGroup]="contactFormList">
+                                                <ng-container *ngFor="let contactForm of contactFormList['controls']; let i=index" [formGroupName]="i">
+                                                    <div class="col pl-0" *ngIf="contactForm.get('isDeleted').value === false">
+                                                        <div class="row">
+                                                            <h6 class="col m-auto font-weight-bold"><span>{{ contactForm.get('isMainContact').value ===
+                                                                    true ? 'Main Contact': 'Contact ' + (i+1)}}</span>
+                                                            </h6>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-12 pt-2">
+                                                                <div class="form-group row no-gutters">
+                                                                    <label class="col-md-2 col-md-3 col-5">
+                                                                        <span>Name<span style="color: red;">*</span></span>
+                                                                    </label>
+                                                                    <div class="col-auto mr-3">:</div>
+                                                                    <div class="col">
+                                                                        <p class="text-break" *ngIf="!contactForm.value.isEdit || contactForm.value.isAccountHolder">{{contactForm.value.name}}</p>
+                                                                        <input *ngIf="contactForm.value.isEdit && !contactForm.value.isAccountHolder" class="form-control form-control-sm"
+                                                                            formControlName="name" [ngClass]="{'is-invalid': formUtil.isFormControlInvalid(contactForm.controls['name'])}">
+                                                                        <div class="invalid-feedback" *ngIf="formUtil.isFormControlInvalid(contactForm.controls['name'])">
+                                                                            <div *ngIf="contactForm.controls['name'].errors?.required">{{cnst.FormErrorMessages.REQUIRED_MSG}}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row no-gutters">
+                                                                    <label class="col-md-2 col-md-3 col-5">
+                                                                        <span>Email<span style="color: red;">*</span></span>
+                                                                    </label>
+                                                                    <div class="col-auto mr-3">:</div>
+                                                                    <div class="col">
+                                                                        <p class="text-break" *ngIf="!contactForm.value.isEdit || contactForm.value.isAccountHolder">{{contactForm.value.emailAddress}}
+                                                                        </p>
+                                                                        <input *ngIf="contactForm.value.isEdit && !contactForm.value.isAccountHolder" type="email" formControlName="emailAddress"
+                                                                            class="form-control form-control-sm"
+                                                                            [ngClass]="{'is-invalid': formUtil.isFormControlInvalid(contactForm.controls['emailAddress'])}">
+                                                                        <div class="invalid-feedback" *ngIf="formUtil.isFormControlInvalid(contactForm.controls['emailAddress'])">
+                                                                            <div *ngIf="contactForm.controls['emailAddress'].errors?.required">{{cnst.FormErrorMessages.REQUIRED_MSG}}</div>
+                                                                            <div *ngIf="contactForm.controls['emailAddress'].hasError('invalidEmailLength')">
+                                                                                {{cnst.FormErrorMessages.invalidEmailLength}}
+                                                                            </div>
+                                                                            <div *ngIf="contactForm.controls['emailAddress'].hasError('pattern')">
+                                                                                {{cnst.FormErrorMessages.invalidEmailFormat}}
+                                                                            </div>
+                                                                            <div *ngIf="contactForm.controls['emailAddress'].hasError('maxLength')">{{cnst.FormErrorMessages.maxEmailLength}}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row no-gutters">
+                                                                    <label class="col-md-2 col-md-3 col-5">
+                                                                        <span>Mobile No.<span style="color: red;">*</span></span>
+                                                                    </label>
+                                                                    <div class="col-auto mr-3">:</div>
+                                                                    <div class="col">
+                                                                        <p class="text-break" *ngIf="!contactForm.value.isEdit || contactForm.value.isAccountHolder">{{contactForm.value.mobileNo}}</p>
+                                                                        <input *ngIf="contactForm.value.isEdit && !contactForm.value.isAccountHolder" maxlength="8" formControlName="mobileNo"
+                                                                            class="form-control form-control-sm"
+                                                                            [ngClass]="{'is-invalid': formUtil.isFormControlInvalid(contactForm.controls['mobileNo'])}">
+                                                                        <div class="invalid-feedback" *ngIf="formUtil.isFormControlInvalid(contactForm.controls['mobileNo'])">
+                                                                            <div *ngIf="contactForm.controls['mobileNo'].errors?.required">{{cnst.FormErrorMessages.REQUIRED_MSG}}</div>
+                                                                            <div *ngIf="contactForm.controls['mobileNo'].hasError('minlength')">{{cnst.FormErrorMessages.INPUT_LENGTH_8}}</div>
+                                                                            <div *ngIf="contactForm.controls['mobileNo'].hasError('maxlength')">{{cnst.FormErrorMessages.INPUT_LENGTH_8}}</div>
+                                                                            <div *ngIf="contactForm.controls['mobileNo'].hasError('invalid') || contactForm.controls['mobileNo'].hasError('pattern')">
+                                                                                {{cnst.FormErrorMessages.INVALID_MOBILE_NO}}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row no-gutters">
+                                                                    <label class="col-md-2 col-md-3 col-5">
+                                                                        <span>Notification<span style="color: red;">*</span></span>
+                                                                    </label>
+                                                                    <div class="col-auto mr-3">:</div>
+                                                                    <div class="col">
+                                                                        <p class="text-break" *ngIf="!contactForm.value.isEdit || contactForm.value.isAccountHolder">{{contactForm.value.notification}}
+                                                                        </p>
+                                                                        <div class="custom-checkbox" *ngIf="contactForm.value.isEdit && !contactForm.value.isAccountHolder">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="form-check-input custom-control-input" formControlName="toAlertByEmail" type="checkbox"
+                                                                                    id="inlineCheckbox1{{i}}" value="toAlertByEmail"
+                                                                                    [ngClass]="{'is-invalid': !contactForm.value.toAlertByEmail && !contactForm.value.toAlertBySms}">
+                                                                                <label class="form-check-label custom-control-label" for="inlineCheckbox1{{i}}">Email</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="form-check-input custom-control-input" formControlName="toAlertBySms" type="checkbox"
+                                                                                    id="inlineCheckbox2{{i}}" value="toAlertBySms"
+                                                                                    [ngClass]="{'is-invalid': !contactForm.value.toAlertByEmail && !contactForm.value.toAlertBySms}">
+                                                                                <label class=" form-check-label custom-control-label" for="inlineCheckbox2{{i}}">SMS</label>
+                                                                            </div>
+                                                                            <div class="invalid-feedback d-block" *ngIf="!contactForm.value.toAlertByEmail && !contactForm.value.toAlertBySms">
+                                                                                <div>{{cnst.FormErrorMessages.MSG_MIN_SELECTION}}</div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row no-gutters" *ngIf="contactForm.value.isEdit">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" class="custom-control-input" id="tenderCheck{{i}}" formControlName="tenderCheck" required>
+                                                                        <label class="custom-control-label" for="tenderCheck{{i}}">I agree and consent to HDB collecting and using information and/ or
+                                                                            relying
+                                                                            and/ or using
+                                                                            any information and/ or records of any other relevant authorities (including HDB) for the purposes of identification and/ or
+                                                                            verification for
+                                                                            tender evaluation, including but not limited to conducting debarment checks and arrears checks.</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" class="custom-control-input" id="consentCheck{{i}}" formControlName="consentCheck" required>
+                                                                        <label class="custom-control-label" for="consentCheck{{i}}">I agree and consent that HDB shall have the right not to reveal the
+                                                                            source of
+                                                                            information to me, or all HDB owners/ tenants of the shop.</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input type="checkbox" class="custom-control-input" id="reservesCheck{{i}}" formControlName="reservesCheck" required>
+                                                                        <label class="custom-control-label" for="reservesCheck{{i}}">I agree and consent that HDB reserves the right to write to and
+                                                                            request
+                                                                            information
+                                                                            from
+                                                                            me, or all HDB owners/ tenants of the shop who shall duly provide the information so requested.</label>
+                                                                    </div>
+                                                                    <div class="invalid-feedback d-block"
+                                                                        *ngIf="contactForm.value.isEdit && (formUtil.isFormControlInvalid(contactForm.get('tenderCheck')) || formUtil.isFormControlInvalid(contactForm.get('consentCheck')) || formUtil.isFormControlInvalid(contactForm.get('reservesCheck')))">
+                                                                        <div
+                                                                            *ngIf="contactForm.get('tenderCheck').errors?.required || contactForm.get('consentCheck').errors?.required || contactForm.get('reservesCheck').errors?.required ">
+                                                                            {{cnst.Messages.DECLARATION_CHECK}}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div *ngIf="contactForm.get('isMainContact').value !== true && !contactForm.value.isEdit" class="col text-left">
+                                                                <button type="button" class="btn btn-primary btn-sm mr-2 mb-2 col-sm-12 col-lg-1" (click)="editContact(contactForm, i)">
+                                                                    Edit </button>
+                                                                <button type="button" class="btn btn-outline-danger btn-sm mb-2 col-sm-12 col-lg-1" (click)="deleteContact(i);"> Delete</button>
+                                                            </div>
+                                                        </div>
+                                                        <div *ngIf="contactForm.get('isMainContact').value">
+                                                            <p>Click <a [routerLink]="cnst.FrontEndUrl.MY_ACCOUNT" style="box-sizing: border-box; color: #cc0001; background-color: initial;">
+                                                                    here
+                                                                </a> to update the main contact via Account.</p>
+                                                        </div>
+                                                        <div class="row" *ngIf="contactForm.value.isEdit && contactForm.controls['userId'].value !== '' ">
+                                                            <div class="col-12 text-left">
+                                                                <button *ngIf="isContactEdit" type="button" class="btn btn-primary btn-sm mr-2 mb-2 col-sm-12 col-lg-1" (click)="updateContacts()">
+
+                                                                    Save
+                                                                </button>
+                                                                <button type="button" class="btn btn-outline-primary btn-sm mb-2 col-sm-12 col-lg-1" (click)="cancelContact(i)">
+                                                                    Cancel</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" *ngIf="isAddContact && contactForm.controls['userId'].value == '' ">
+                                                            <div class="col-12 text-left">
+                                                                <button type="button" class="btn btn-primary btn-sm mr-2 mb-2 col-sm-12 col-lg-1" (click)="updateContacts()">
+
+                                                                    Save
+                                                                </button>
+                                                                <button type="button" class="btn btn-outline-primary btn-sm mb-2 col-sm-12 col-lg-1" (click)="deleteContact(i);">
+                                                                    Cancel</button>
+                                                            </div>
+                                                        </div>
+                                                        <hr class="mb-4">
+                                                    </div>
+                                                </ng-container>
+                                            </form>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <p class="text-muted">
+                                                        <strong>You may add up to 3 alert contacts.</strong>
+                                                    </p>
+                                                    <button *ngIf="(contactFormList.value.length < 4) " type="button" class="btn btn-outline-primary btn-sm mr-3 font-weight-bold"
+                                                        (click)="addToContactFormListArray('');isAddContact = true"><em class="fas fa-plus"></em> Add
+                                                        Contact</button>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngb-panel>
+                                </ngb-accordion>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="row mb-3">
+                            <div class="col-12 card-white">
+                                <ngb-accordion #acc="ngbAccordion" activeIds="alert-details-panel">
+                                    <ngb-panel id="alert-details-panel">
+                                        <ng-template ngbPanelHeader let-opened="opened">
+                                            <div class="d-flex align-items-center justify-content-between accordion-header">
+                                                <button ngbPanelToggle class="btn btn-sm p-0 text-left" aria-label="toggle">
+                                                    <h5 class="font-weight-bold">Step 2: Update Alert Preferences</h5>
+                                                </button>
+                                                <button ngbPanelToggle class="btn btn-sm p-0" aria-label="toggle"><em class="p-0 fa fa-top float-right mt-1 circle-icon"
+                                                        [ngClass]="opened ? 'fa-chevron-up' : 'fa-chevron-down'"></em></button>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template ngbPanelContent>
+
+                                            <form [formGroup]="alertFormList" class="green-theme">
+                                                <ng-container *ngFor="let alertForm of alertFormList['controls']; let i=index" [formGroupName]="i">
+                                                    <div *ngIf="alertForm.get('isDeleted').value === false">
+                                                        <div class="row">
+                                                            <h6 class="col m-auto font-weight-bold"><span>{{i+1}} : </span> Alert Preference</h6>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-12 pt-2">
+                                                                <div class="form-group row no-gutters">
+                                                                    <label class="col-md-2 col-5">
+                                                                        <span>Trade<span style="color: red;">*</span></span>
+                                                                    </label>
+                                                                    <div class="col-auto mr-3">:</div>
+                                                                    <div class="col">
+                                                                        <p class="text-break" *ngIf="!alertForm.value.isEdit">{{alertForm.value.tradeListLabel}}</p>
+                                                                        <ng-container *ngIf="alertForm.value.isEdit">
+                                                                            <ng-select [items]="trades" [multiple]="true" bindLabel="label" groupBy="group" [selectableGroup]="false"
+                                                                                [closeOnSelect]="false" bindValue="key" formControlName="trades" name="trades" placeholder="Select Trade"
+                                                                                [ngClass]="{'is-invalid': formUtil.isFormControlInvalid(alertForm.controls['trades'])}"
+                                                                                (change)="sort(alertForm,'trades','hdbTownListLabel','tradeListLabel', $event)">
+                                                                                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                                                                    <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" [ngModelOptions]="{ standalone : true }"
+                                                                                        name="item-{{index}}" /> {{item.label}}
+                                                                                </ng-template>
+                                                                            </ng-select>
+                                                                            <div class="invalid-feedback text-red" *ngIf="formUtil.isFormControlInvalid(alertForm.controls['trades'])">
+                                                                                <div *ngIf="alertForm.controls['trades'].errors?.required">{{cnst.FormErrorMessages.MSG_MIN_SELECTION}}</div>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row no-gutters">
+                                                                    <label class="col-md-2 col-5">
+                                                                        <span>Location</span>
+                                                                    </label>
+                                                                    <div class="col-auto mr-3">:</div>
+                                                                    <div class="col">
+                                                                        <p class="text-break" *ngIf="!alertForm.value.isEdit">{{alertForm.value.hdbTownListLabel ? alertForm.value.hdbTownListLabel :
+                                                                            'Any'}}</p>
+                                                                        <ng-container *ngIf="alertForm.value.isEdit">
+                                                                            <ng-select [items]="hdbTowns" [multiple]="true" bindLabel="label" [selectableGroup]="false" [closeOnSelect]="false"
+                                                                                bindValue="key" formControlName="hdbTowns" name="hdbTowns" placeholder="Any"
+                                                                                (change)="sort(alertForm,'hdbTowns', 'hdbTownListLabel','tradeListLabel',$event)">
+                                                                                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                                                                    <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" [ngModelOptions]="{ standalone : true }"
+                                                                                        name="item-{{index}}" /> {{item.label}}
+                                                                                </ng-template>
+                                                                            </ng-select>
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row no-gutters">
+                                                                    <label class="col-md-2 col-5">
+                                                                        <span>Floor Area</span>
+                                                                    </label>
+                                                                    <div class="col-auto mr-3">:</div>
+                                                                    <div class="col input-group">
+                                                                        <p class="text-break" *ngIf="!alertForm.value.isEdit">{{alertForm.value.minFloorArea <= 0 || alertForm.value.minFloorArea==null
+                                                                                ? 'Mininum sqm' : displayTS(alertForm.value.minFloorArea) +' sqm ('+showSqft(alertForm.value.minFloorArea)+')' }} to
+                                                                                {{alertForm.value.maxFloorArea>= cnst.maxFloorAreaMaximum || alertForm.value.maxFloorArea == null ? 'Maximum sqm' :
+                                                                                displayTS(alertForm.value.maxFloorArea)+' sqm ('+showSqft(alertForm.value.maxFloorArea)+')' }}</p>
+                                                                        <ng-container *ngIf="alertForm.value.isEdit ">
+                                                                            <div ngbDropdown>
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <input amountRoundSeparator type="number" class="form-control input-landing green-border" placeholder="Min"
+                                                                                        formControlName="minFloorArea" id="minFloorArea" autocomplete="off" maxlength="16"
+                                                                                        [ngClass]="{ 'is-invalid-sqm-content': formUtil.isFormControlInvalid(alertForm.controls['minFloorArea']) }"
+                                                                                        (input)="minFloorAreaFocusOut(alertForm)" (focusout)="minFloorAreaFocusOut(alertForm)" ngbDropdownToggle>
+                                                                                    <div class="input-group-append">
+                                                                                        <span class="input-group-text sqm"
+                                                                                            [ngClass]="{ 'is-invalid-sqm': formUtil.isFormControlInvalid(alertForm.controls['minFloorArea']) }">sqm</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div ngbDropdownMenu>
+                                                                                    <button ngbDropdownItem (click)="setFloorArea(alertForm,'minFloorArea',null)">No Min</button>
+                                                                                    <div class="dropdown-divider"></div>
+                                                                                    <button ngbDropdownItem *ngFor="let floorArea of cnst.floorAreaArray"
+                                                                                        (click)="setFloorArea(alertForm,'minFloorArea',floorArea)"
+                                                                                        [disabled]="alertForm.value.maxFloorArea && (floorArea.key > alertForm.value.maxFloorArea)">{{floorArea.label}}</button>
+                                                                                </div>
+                                                                                <div class="invalid-feedback d-block text-red"
+                                                                                    *ngIf="formUtil.isFormControlInvalid(alertForm.controls['minFloorArea'])">
+                                                                                    <div *ngIf="alertForm.controls['minFloorArea'].errors?.maxlength">Max floor area is 16 digits.</div>
+                                                                                    <div *ngIf="alertForm.controls['minFloorArea'].errors?.invalidFloorAreaRange">Floor Area Range is invalid.</div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <p class="p-2 mb-0">to</p>
+                                                                            <div ngbDropdown>
+                                                                                <div class="input-group input-group-sm">
+                                                                                    <input amountRoundSeparator type="number" class="form-control input-landing green-border" placeholder="Max"
+                                                                                        formControlName="maxFloorArea" autocomplete="off" maxlength="16"
+                                                                                        [ngClass]="{ 'is-invalid-sqm-content': formUtil.isFormControlInvalid(alertForm.controls['maxFloorArea']) }"
+                                                                                        (input)="maxFloorAreaFocusOut(alertForm)" (focusout)="maxFloorAreaFocusOut(alertForm)" ngbDropdownToggle>
+                                                                                    <div class="input-group-append">
+                                                                                        <span class="input-group-text sqm"
+                                                                                            [ngClass]="{ 'is-invalid-sqm': formUtil.isFormControlInvalid(alertForm.controls['maxFloorArea']) }">sqm</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div ngbDropdownMenu>
+                                                                                    <button ngbDropdownItem (click)="setFloorArea(alertForm,'maxFloorArea',null)">No Max</button>
+                                                                                    <div class="dropdown-divider"></div>
+                                                                                    <button ngbDropdownItem *ngFor="let floorArea of cnst.floorAreaArray"
+                                                                                        (click)="setFloorArea(alertForm,'maxFloorArea',floorArea)"
+                                                                                        [disabled]="alertForm.value.minFloorArea && (floorArea.key < alertForm.value.minFloorArea)">{{floorArea.label}}</button>
+                                                                                </div>
+                                                                                <div class="invalid-feedback d-block text-red"
+                                                                                    *ngIf="formUtil.isFormControlInvalid(alertForm.controls['maxFloorArea'])">
+                                                                                    <div *ngIf="alertForm.controls['maxFloorArea'].errors?.maxlength">Max floor area is 16 digits.</div>
+                                                                                    <div *ngIf="alertForm.controls['maxFloorArea'].errors?.invalidFloorAreaRange">Floor Area Range is invalid.</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row no-gutters">
+                                                                    <label class="col-md-2 col-5">
+                                                                        <span [ngClass]="{'required':(isEdit)}">Contact Details <span style="color: red;">*</span></span>
+                                                                    </label>
+                                                                    <div class="col-auto mr-3">:</div>
+                                                                    <div class="col">
+                                                                        <p class="text-break" *ngIf="!alertForm.value.isEdit">{{alertForm.value.contactListLabel}}</p>
+                                                                        <ng-container *ngIf="alertForm.value.isEdit">
+                                                                            <ng-select [items]="contactList" [multiple]="true" bindLabel="name" [selectableGroup]="false" [closeOnSelect]="false"
+                                                                                bindValue="contactId" formControlName="contacts" placeholder="Select Contact"
+                                                                                [ngClass]="{'is-invalid': formUtil.isFormControlInvalid(alertForm.controls['contacts'])}">
+                                                                                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                                                                    <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" [ngModelOptions]="{ standalone : true }"
+                                                                                        name="item-{{i}}-{{index}}" />
+                                                                                    {{item.name}}
+                                                                                </ng-template>
+                                                                            </ng-select>
+                                                                            <div class="invalid-feedback text-red" *ngIf="formUtil.isFormControlInvalid(alertForm.controls['contacts'])">
+                                                                                <div *ngIf="alertForm.controls['contacts'].errors?.required">{{cnst.FormErrorMessages.MSG_MIN_SELECTION}}</div>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col text-left">
+                                                                <button *ngIf="!alertForm.value.isEdit" type="button" class="btn btn-primary btn-sm mr-2 mb-2 col-sm-12 col-lg-1"
+                                                                    (click)="alertForm.get('isEdit').setValue(!alertForm.value.isEdit);isPreferenceEdit=true;sortOnEdit(alertForm,'trades')">
+                                                                    Edit</button>
+                                                                <button type=" button" *ngIf="!alertForm.value.isEdit" class="btn btn-outline-danger btn-sm pr-2 mb-2 col-sm-12 col-lg-1"
+                                                                    (click)="deleteProfile(i);isPreferenceEdit = true;">
+                                                                    Delete</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" *ngIf="alertForm.value.isEdit && alertForm.controls['userId'].value !== '' ">
+                                                            <div class="col-12 text-left">
+                                                                <button *ngIf="isPreferenceEdit" type="button" class="btn btn-primary btn-sm mr-2 mb-2 col-sm-12 col-lg-1"
+                                                                    (click)="updateSpecificProfile(i)">
+
+                                                                    Save
+                                                                </button>
+                                                                <button type="button" class="btn btn-outline-primary btn-sm mb-2 col-sm-12 col-lg-1" (click)="cancelProfile(alertForm);">
+                                                                    Cancel</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" *ngIf="alertForm.value.isEdit && alertForm.controls['userId'].value === '' ">
+                                                            <div class="col-12 text-left">
+                                                                <button type="button" class="btn btn-primary btn-sm mr-2 mb-2 col-sm-12 col-lg-1" (click)="updateSpecificProfile(i)">
+                                                                    Save
+                                                                </button>
+                                                                <button type="button" class="btn btn-outline-primary btn-sm mb-2 col-sm-12 col-lg-1" (click)="deleteNewProfile(i)">
+                                                                    Cancel</button>
+                                                            </div>
+                                                        </div>
+
+                                                        <hr class="mb-4">
+                                                    </div>
+                                                </ng-container>
+                                            </form>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <button type="button" class="btn btn-outline-primary btn-sm mr-3 font-weight-bold" (click)="addToAlertFormListArray('');isAddPerference = true;"><em
+                                                            class="fas fa-plus"></em> Add Alert Preference</button>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngb-panel>
+                                </ngb-accordion>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
